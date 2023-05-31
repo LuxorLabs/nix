@@ -15,7 +15,14 @@ else
 fi
 
 nix-shell -p nix-info --run "nix-info -m"
+
+# install cachix
 nix --experimental-features 'nix-command flakes' profile install nixpkgs#cachix
-echo "trusted-users = root <replace_with_your_username>" | sudo tee -a /etc/nix/nix.conf && sudo pkill nix-daemon
+echo "trusted-users = root $(whoami)" | sudo tee -a /etc/nix/nix.conf && sudo pkill nix-daemon
+
+# install devenv
 cachix use devenv
 nix --experimental-features 'nix-command flakes' profile install --accept-flake-config github:cachix/devenv/latest
+
+# install direnv
+nix --experimental-features 'nix-command flakes' profile install nixpkgs#direnv
