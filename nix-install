@@ -1,0 +1,21 @@
+echo "installing nix...";
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    sh <(curl -L https://nixos.org/nix/install) --daemon
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    sh <(curl -L https://nixos.org/nix/install)
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+    sh <(curl -L https://nixos.org/nix/install) --no-daemon
+elif [[ "$OSTYPE" == "msys" ]]; then
+    sh <(curl -L https://nixos.org/nix/install) --no-daemon
+elif [[ "$OSTYPE" == "win32" ]]; then
+    sh <(curl -L https://nixos.org/nix/install) --no-daemon
+else
+    echo "$OSTYPE not supported!"
+    exit 1;
+fi
+
+nix-shell -p nix-info --run "nix-info -m"
+nix --experimental-features 'nix-command flakes' profile install nixpkgs#cachix
+echo "trusted-users = root <replace_with_your_username>" | sudo tee -a /etc/nix/nix.conf && sudo pkill nix-daemon
+cachix use devenv
+nix --experimental-features 'nix-command flakes' profile install --accept-flake-config github:cachix/devenv/latest
