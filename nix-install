@@ -1,4 +1,13 @@
 curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
 
+# install cachix
+
+nix --experimental-features 'nix-command flakes' profile install nixpkgs#cachix
+cachix use devenv
+
+# install devenv
+
+nix --experimental-features 'nix-command flakes' profile install --accept-flake-config github:cachix/devenv/latest
+
 # install direnv
 nix --experimental-features 'nix-command flakes' profile install nixpkgs#direnv
