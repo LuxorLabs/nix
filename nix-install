@@ -1,13 +1,45 @@
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+# install nix
+if ! command -v nix &> /dev/null
+then
+    echo "nix command not found, installing..."
+    curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+else
+    echo "nix command already exists"
+fi
 
 # install cachix
-
-nix --experimental-features 'nix-command flakes' profile install nixpkgs#cachix
-cachix use devenv
+if ! command -v cachix &> /dev/null
+then
+    echo "cachix command not found, installing..."
+    nix --experimental-features 'nix-command flakes' profile install nixpkgs#cachix
+    cachix use devenv
+else
+    echo "cachix command already exists"
+fi
 
 # install devenv
-
-nix --experimental-features 'nix-command flakes' profile install --accept-flake-config github:cachix/devenv/latest
+if ! command -v devenv &> /dev/null
+then
+    echo "devenv command not found, installing..."
+    nix --experimental-features 'nix-command flakes' profile install --accept-flake-config github:cachix/devenv/latest
+else
+    echo "devenv command already exists"
+fi
 
 # install direnv
-nix --experimental-features 'nix-command flakes' profile install nixpkgs#direnv
+if ! command -v direnv &> /dev/null
+then
+    echo "direnv command not found, installing..."
+    nix --experimental-features 'nix-command flakes' profile install nixpkgs#direnv
+else
+    echo "direnv command already exists"
+fi
+
+# gcloud sdk
+if ! command -v gcloud &> /dev/null
+then
+    echo "gcloud command not found, installing..."
+    nix --experimental-features 'nix-command flakes' profile install nixpkgs#google-cloud-sdk
+else
+    echo "gcloud command already exists"
+fi
