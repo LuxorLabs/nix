@@ -35,11 +35,3 @@ else
     echo "direnv command already exists"
 fi
 
-# gcloud sdk
-if ! command -v gcloud &> /dev/null
-then
-    echo "gcloud command not found, installing..."
-    nix --experimental-features 'nix-command flakes' profile install nixpkgs#google-cloud-sdk
-else
-    echo "gcloud command already exists"
-fi
